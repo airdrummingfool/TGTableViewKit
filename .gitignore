@@ -1,0 +1,10 @@
+# Sensitive information
+*.p12
+
+# XCode user data
+*.xcuserdatad
+
+# OS-specific files
+.DS_Store
+thumbs.db
+desktop.ini
