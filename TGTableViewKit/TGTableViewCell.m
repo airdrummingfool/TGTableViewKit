@@ -23,7 +23,7 @@
 }
 
 - (BOOL)configureForObject:(NSObject *)object inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath {
-	return YES;
+	return NO;
 }
 
 - (void)updateDisplay {
