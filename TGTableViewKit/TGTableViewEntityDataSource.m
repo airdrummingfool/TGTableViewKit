@@ -138,7 +138,7 @@
 
 #pragma mark - FUITableVewDataSource methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return [[self.cellClass class] defaultSize].height;
+	return [[self.cellClass class] defaultHeight];
 }
 
 #pragma mark - NSFetchedResultsController stuff

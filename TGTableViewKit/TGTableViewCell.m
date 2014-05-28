@@ -10,10 +10,11 @@
 
 @implementation TGTableViewCell
 
-+ (CGSize)defaultSize {
-	return CGSizeMake(320, 44);
++ (CGFloat)defaultHeight {
+	return 44;
 }
 
+/// Use the class name as the reuse identifier, since instances of the class should be reusable for different rows.
 + (NSString *)reuseIdentifier {
 	return NSStringFromClass([self class]);
 }

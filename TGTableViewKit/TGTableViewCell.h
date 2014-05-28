@@ -11,9 +11,11 @@
 @protocol TGTableViewCell <NSObject>
 
 @required
-+ (CGSize)defaultSize;
+/// This is here so we can use a class pointer later
++ (id)alloc;
++ (CGFloat)defaultHeight;
 + (NSString *)reuseIdentifier;
-- (id)init;
+- (instancetype)init;
 - (BOOL)configureForObject:(NSObject *)object inTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath;
 - (void)updateDisplay;
 
