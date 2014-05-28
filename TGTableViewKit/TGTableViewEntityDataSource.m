@@ -10,6 +10,7 @@
 
 @interface TGTableViewEntityDataSource ()
 
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, strong) NSFetchedResultsController *frc;
 @property (nonatomic, strong) NSArray *sortDescriptors;
 
@@ -31,11 +32,10 @@
 	if (!_frc) {
 		NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:self.entityName];
 		if (!self.sortDescriptors.count) {
-			FDebug(@"Error: Cannot create fetch results controller for %@ without a sort descriptor.", self.entityName);
 			return nil;
 		}
 		fetchRequest.sortDescriptors = self.sortDescriptors;
-		NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:NSManagedObjectContext.defaultContext sectionNameKeyPath:self.sectionNameKeyPath cacheName:nil];
+		NSFetchedResultsController *frc = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:self.managedObjectContext sectionNameKeyPath:self.sectionNameKeyPath cacheName:nil];
 		frc.delegate = self;
 		[frc performFetch:nil];
 		_frc = frc;
@@ -76,14 +76,19 @@
 	}
 }
 
+#pragma mark - Lifecycle
+- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)context {
+	if (!(self = [super init])) return nil;
+	_managedObjectContext = context;
+	return self;
+}
+
 #pragma mark - Object access
 - (id)tableView:(UITableView *)tableView objectAtIndexPath:(NSIndexPath *)indexPath {
-	indexPath = [self frcIndexPathForTableViewIndexPath:indexPath];
 	return [self.frc objectAtIndexPath:indexPath];
 }
 
 - (void)performFetch {
-	FDebug(@"performing fetch and reloading data");
 	[self.frc performFetch:nil];
 	[self.tableView reloadData];
 }
@@ -95,7 +100,6 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	section = [self frcSectionForTableViewSection:section];
 	if (self.sectionNameKeyPath.length) {
 		NSObject *object = [self.frc objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];
 		return [object valueForKeyPath:self.sectionNameKeyPath];
@@ -104,14 +108,11 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	section = [self frcSectionForTableViewSection:section];
 	id <NSFetchedResultsSectionInfo> sectionInfo = [[self.frc sections] objectAtIndex:section];
 	return [sectionInfo numberOfObjects];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	indexPath = [self frcIndexPathForTableViewIndexPath:indexPath];
-
 	UITableViewCell<TGTableViewCell> *cell = [tableView dequeueReusableCellWithIdentifier:[[self.cellClass class] reuseIdentifier]];
 	if (!cell) {
 		// if dequeue doesn't work, it's not registered. if it's not registered, assume we can alloc/init (AKA no nib)
@@ -125,9 +126,7 @@
 	@try {
 		object = [self.frc objectAtIndexPath:indexPath];
 	}
-	@catch (NSException *exception) {
-		FDebug(@"FRC: Error: %@", exception);
-	}
+	@catch (NSException *exception) {}
 
 	if (![cell configureForObject:object inTableView:tableView atIndexPath:indexPath]) {
 		// In case somehow CFO didn't work, show an error
@@ -149,7 +148,6 @@
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type {
-	sectionIndex = [self tableViewSectionForFRCSection:sectionIndex];
 	switch(type) {
 		case NSFetchedResultsChangeInsert:
 			[self.tableView insertSections:[NSIndexSet indexSetWithIndex:sectionIndex] withRowAnimation:UITableViewRowAnimationFade];
@@ -161,9 +159,6 @@
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath {
-	indexPath = [self tableViewIndexPathForFRCIndexPath:indexPath];
-	newIndexPath = [self tableViewIndexPathForFRCIndexPath:newIndexPath];
-
 	switch(type) {
 		case NSFetchedResultsChangeInsert:
 			[self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -186,7 +181,6 @@
 }
 
 - (void)dealloc {
-	FDebug(@"DEALLOC: %@ (%@)", NSStringFromClass([self class]), self.entityName);
 	//Set the delegate to nil so that the fetch results controller doesn't try sending messages to a de-allocated tableview
 	_frc.delegate = nil;
 	_frc = nil;

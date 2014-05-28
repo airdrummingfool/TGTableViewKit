@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 #import "TGTableView.h"
 #import "TGTableViewDataSource.h"
 
@@ -20,6 +21,8 @@
 
 @property (nonatomic, readonly) NSArray *sortDescriptors;
 - (void)addSortDescriptor:(NSSortDescriptor *)descriptor;
+
+- (instancetype)initWithManagedObjectContext:(NSManagedObjectContext *)context;
 
 @end
 

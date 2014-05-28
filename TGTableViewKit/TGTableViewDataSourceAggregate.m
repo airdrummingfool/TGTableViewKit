@@ -42,15 +42,16 @@
 	}
 }
 
-- (void)addDataSource:(NSObject<UITableViewDataSource> *)dataSource {
+- (void)addDataSource:(NSObject<TGTableViewDataSource> *)dataSource {
 	NSAssert(![self.dataSources containsObject:dataSource], @"Error: Cannot add the same data source twice.");
+	dataSource.tableView = self.tableView;
 	[self.dataSources addObject:dataSource];
 	NSNumber *indexOfNewDataSource = [NSNumber numberWithInteger:([self.dataSources count] -1)];
 	[self.dataSourceOffsets setObject:@0 forKey:indexOfNewDataSource];
 	[self.tableView reloadData];
 }
 
-- (void)removeDataSource:(NSObject<UITableViewDataSource> *)dataSource {
+- (void)removeDataSource:(NSObject<TGTableViewDataSource> *)dataSource {
 	NSAssert([self.dataSources containsObject:dataSource], @"Error: Cannot remove a data source that doesn't exist.");
 	NSNumber *indexOfDataSourceToRemove = [NSNumber numberWithInteger:[self.dataSources indexOfObject:dataSource]];
 	[self.dataSources removeObject:dataSource];
