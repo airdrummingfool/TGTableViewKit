@@ -25,8 +25,6 @@
 
 @interface TGTableViewEntityDataSource : NSObject <TGTableViewEntityDataSource, NSFetchedResultsControllerDelegate>
 
-@property (nonatomic) NSInteger sectionOffset;
-
 - (void)performFetch;
 
 @end

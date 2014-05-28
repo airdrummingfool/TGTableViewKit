@@ -7,13 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TGTableViewEntityDataSource.h"
+#import "TGTableViewDataSource.h"
 
 @interface TGTableViewDataSourceAggregate : NSObject <TGTableViewDataSource>
 
-- (void)addDataSource:(TGTableViewEntityDataSource *)dataSource;
-- (void)removeDataSource:(TGTableViewEntityDataSource *)dataSource;
+- (void)addDataSource:(NSObject<TGTableViewDataSource> *)dataSource;
+- (void)removeDataSource:(NSObject<TGTableViewDataSource> *)dataSource;
 
-- (TGTableViewEntityDataSource *)dataSourceForSection:(NSInteger)section;
+- (NSObject<TGTableViewDataSource> *)dataSourceForSection:(NSInteger)section;
 
 @end

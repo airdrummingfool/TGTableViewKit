@@ -13,11 +13,6 @@
 @property (nonatomic, strong) NSFetchedResultsController *frc;
 @property (nonatomic, strong) NSArray *sortDescriptors;
 
-- (NSIndexPath *)frcIndexPathForTableViewIndexPath:(NSIndexPath *)tableViewIndexPath;
-- (NSIndexPath *)tableViewIndexPathForFRCIndexPath:(NSIndexPath *)frcIndexPath;
-- (NSInteger)frcSectionForTableViewSection:(NSInteger)tableViewSection;
-- (NSInteger)tableViewSectionForFRCSection:(NSInteger)frcSection;
-
 @end
 
 @implementation TGTableViewEntityDataSource
@@ -188,25 +183,6 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller {
 	[self.tableView endUpdates];
-}
-
-#pragma mark Private helper methods
-- (NSIndexPath *)frcIndexPathForTableViewIndexPath:(NSIndexPath *)tableViewIndexPath {
-	return [NSIndexPath indexPathForRow:tableViewIndexPath.row inSection:[self frcSectionForTableViewSection:tableViewIndexPath.section]];
-}
-
-- (NSIndexPath *)tableViewIndexPathForFRCIndexPath:(NSIndexPath *)frcIndexPath {
-	return [NSIndexPath indexPathForRow:frcIndexPath.row inSection:[self tableViewSectionForFRCSection:frcIndexPath.section]];
-}
-
-- (NSInteger)frcSectionForTableViewSection:(NSInteger)tableViewSection {
-	NSInteger frcSection = tableViewSection - self.sectionOffset;
-	return frcSection;
-}
-
-- (NSInteger)tableViewSectionForFRCSection:(NSInteger)frcSection {
-	NSInteger tableViewSection = frcSection + self.sectionOffset;
-	return tableViewSection;
 }
 
 - (void)dealloc {
