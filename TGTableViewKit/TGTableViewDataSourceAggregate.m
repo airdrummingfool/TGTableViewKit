@@ -54,7 +54,7 @@
 - (void)removeDataSource:(NSObject<TGTableViewDataSource> *)dataSource {
 	NSAssert([self.dataSources containsObject:dataSource], @"Error: Cannot remove a data source that doesn't exist.");
 	NSNumber *indexOfDataSourceToRemove = [NSNumber numberWithInteger:[self.dataSources indexOfObject:dataSource]];
-	[self.dataSources removeObject:dataSource];
+	[self.dataSources removeObjectAtIndex:[indexOfDataSourceToRemove integerValue]];
 	[self.dataSourceOffsets removeObjectForKey:indexOfDataSourceToRemove];
 	[self.tableView reloadData];
 }

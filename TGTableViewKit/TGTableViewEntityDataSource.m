@@ -115,18 +115,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell<TGTableViewCell> *cell = [tableView dequeueReusableCellWithIdentifier:[self.cellClass reuseIdentifier]];
 	if (!cell) {
-		// if dequeue doesn't work, it's not registered. if it's not registered, assume we can alloc/init (AKA no nib)
+		// if dequeue doesn't work, it's not registered. if it's not registered, assume we can alloc/init (i.e. no nib)
 		cell = [[self.cellClass alloc] init];
 	}
 
-	NSObject *object = nil;
-
-	// We try/catch this because of a crash that happens during a search when the non-search tableView tries to update its content after the predicate has changed
-	// @TODO: maybe use a separate data source for the search view controller :p
-	@try {
-		object = [self.frc objectAtIndexPath:indexPath];
-	}
-	@catch (NSException *exception) {}
+	NSObject *object = [self.frc objectAtIndexPath:indexPath];
 
 	if (![cell configureForObject:object inTableView:tableView atIndexPath:indexPath]) {
 		// In case somehow CFO didn't work, show an error
@@ -136,7 +129,7 @@
 	return cell;
 }
 
-#pragma mark - FUITableVewDataSource methods
+#pragma mark - TGTableVewDataSource methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	return [self.cellClass defaultHeight];
 }

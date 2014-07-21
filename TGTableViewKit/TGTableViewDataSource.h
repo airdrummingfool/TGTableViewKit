@@ -10,7 +10,7 @@
 
 @protocol TGTableViewDataSource <UITableViewDataSource>
 
-@property (nonatomic, weak) UITableView *tableView;
+@property (nonatomic, strong) UITableView *tableView;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (id)tableView:(UITableView *)tableView objectAtIndexPath:(NSIndexPath *)indexPath;
