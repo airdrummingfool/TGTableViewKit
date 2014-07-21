@@ -113,10 +113,10 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	UITableViewCell<TGTableViewCell> *cell = [tableView dequeueReusableCellWithIdentifier:[[self.cellClass class] reuseIdentifier]];
+	UITableViewCell<TGTableViewCell> *cell = [tableView dequeueReusableCellWithIdentifier:[self.cellClass reuseIdentifier]];
 	if (!cell) {
 		// if dequeue doesn't work, it's not registered. if it's not registered, assume we can alloc/init (AKA no nib)
-		cell = [[[self.cellClass class] alloc] init];
+		cell = [[self.cellClass alloc] init];
 	}
 
 	NSObject *object = nil;
@@ -138,7 +138,7 @@
 
 #pragma mark - FUITableVewDataSource methods
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-	return [[self.cellClass class] defaultHeight];
+	return [self.cellClass defaultHeight];
 }
 
 #pragma mark - NSFetchedResultsController stuff

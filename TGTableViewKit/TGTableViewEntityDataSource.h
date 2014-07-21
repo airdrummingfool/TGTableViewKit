@@ -11,13 +11,16 @@
 #import "TGTableView.h"
 #import "TGTableViewDataSource.h"
 
+
 @protocol TGTableViewEntityDataSource <TGTableViewDataSource>
 
 @property (nonatomic, strong) NSString *entityName;
 @property (nonatomic, strong) NSString *sectionName;
-@property (nonatomic, strong) NSString *sectionNameKeyPath;	// This takes precedence over sectionName
+/// This takes precedence over sectionName
+@property (nonatomic, strong) NSString *sectionNameKeyPath;
 @property (nonatomic, readwrite) NSPredicate *predicate;
-@property (nonatomic, strong) UITableViewCell<TGTableViewCell> *cellClass; // Must be registered on tableView or alloc/init-able
+/// Must be registered on the tableView or alloc/init-able
+@property (nonatomic) Class<TGTableViewCell> cellClass;
 
 @property (nonatomic, readonly) NSArray *sortDescriptors;
 - (void)addSortDescriptor:(NSSortDescriptor *)descriptor;
