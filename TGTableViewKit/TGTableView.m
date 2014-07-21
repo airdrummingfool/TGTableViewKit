@@ -10,6 +10,37 @@
 
 @implementation TGTableView
 
+static UIView *footerToHideSeparators;
+
+- (void)setHidesExcessiveSeparators:(BOOL)hidesExcessiveSeparators {
+	if (_hidesExcessiveSeparators != hidesExcessiveSeparators) {
+		_hidesExcessiveSeparators = hidesExcessiveSeparators;
+		if (_hidesExcessiveSeparators) {
+			if (!footerToHideSeparators) {
+				footerToHideSeparators = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, .01)];
+				footerToHideSeparators.backgroundColor = [UIColor clearColor];
+			}
+			// Immediately set footer view if necessary
+			if (!self.tableFooterView) {
+				self.tableFooterView = footerToHideSeparators;
+			}
+		}
+		else {
+			// Remove footer view if we set it
+			if (self.tableFooterView == footerToHideSeparators) {
+				self.tableFooterView = nil;
+			}
+		}
+	}
+}
+
+- (void)setTableFooterView:(UIView *)tableFooterView {
+	if (self.hidesExcessiveSeparators && !tableFooterView) {
+		tableFooterView = footerToHideSeparators;
+	}
+	[super setTableFooterView:tableFooterView];
+}
+
 // @TODO: create <TGTableViewDelegate> that calls emptyViewForTableView:
 - (void)setEmptyView:(UIView *)emptyView {
 	if (_emptyView == emptyView) {

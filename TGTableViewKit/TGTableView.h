@@ -14,6 +14,7 @@
 
 @property (nonatomic, weak) NSObject<TGTableViewDataSource> *dataSource;
 
+@property (nonatomic) BOOL hidesExcessiveSeparators;
 @property (nonatomic, readonly) BOOL isEmpty;
 @property (nonatomic, strong) UIView *emptyView;
 
