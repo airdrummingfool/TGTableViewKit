@@ -101,8 +101,8 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 	if (self.sectionNameKeyPath.length) {
-		NSObject *object = [self.frc objectAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section]];
-		return [object valueForKeyPath:self.sectionNameKeyPath];
+		id <NSFetchedResultsSectionInfo> sectionInfo = [[self.frc sections] objectAtIndex:section];
+		return [sectionInfo name];
 	}
 	return self.sectionName;
 }
