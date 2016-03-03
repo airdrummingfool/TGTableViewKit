@@ -10,6 +10,8 @@
 
 @implementation TGTableView
 
+@dynamic dataSource;
+
 static UIView *footerToHideSeparators;
 
 - (void)setHidesExcessiveSeparators:(BOOL)hidesExcessiveSeparators {
