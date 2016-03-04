@@ -12,7 +12,10 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
+@optional
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+@required
 - (id)tableView:(UITableView *)tableView objectAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
