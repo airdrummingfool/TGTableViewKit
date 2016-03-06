@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TGTableViewDataSource.h"
 #import "TGTableViewCell.h"
+#import "TGTableViewClearCell.h"
 
 @interface TGTableView : UITableView
 
